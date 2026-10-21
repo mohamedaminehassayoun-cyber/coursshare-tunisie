@@ -1,0 +1,6 @@
+{
+  "name": "CoursShare Tunisie - Partage de cours & examens des facultés tunisiennes",
+  "description": "Plateforme académique collaborative 100% tunisienne : INSAT, ISG, IHEC, FST, FMT, FDSPT, ESEN, IPEIT, FSEG Sfax... Cours magistraux, séries de TD, DS et examens de session principale et contrôle.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
