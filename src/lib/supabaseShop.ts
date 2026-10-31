@@ -236,11 +236,23 @@ export const SupabaseShopService = {
     return session;
   },
 
-  async getUserRole(userId: string): Promise<'admin' | 'client'> {
+  async getUserRole(userId: string, userEmail?: string): Promise<'admin' | 'client'> {
+    // 1. Accès direct pour le compte propriétaire
+    if (userEmail && userEmail.toLowerCase().trim() === 'mohamedamineamine29954@gmail.com') {
+      return 'admin';
+    }
+
     const supabase = getSupabase();
     if (!supabase || !userId) return 'client';
 
     try {
+      // 2. Vérification de l'email courant de session
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email && user.email.toLowerCase().trim() === 'mohamedamineamine29954@gmail.com') {
+        return 'admin';
+      }
+
+      // 3. Vérification dans la table user_roles de Supabase
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')

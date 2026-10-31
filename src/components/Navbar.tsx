@@ -33,6 +33,7 @@ interface NavbarProps {
   activeCategory: CategorySlug | 'all';
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  onGoHome: () => void;
   // Supabase TP3 additions
   user: SupabaseUser | null;
   userRole: 'admin' | 'client';
@@ -56,6 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeCategory,
   searchQuery,
   setSearchQuery,
+  onGoHome,
   user,
   userRole,
   cartCount,
@@ -128,24 +130,42 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-16 gap-3">
           {/* Brand Logo */}
           <div className="flex items-center gap-3 shrink-0">
-            <a 
-              href="#" 
-              onClick={(e) => { e.preventDefault(); onSelectCategory('all'); }}
-              className="group flex items-center gap-2.5"
+            <button 
+              onClick={(e) => { 
+                e.preventDefault(); 
+                onGoHome(); 
+              }}
+              className="group flex items-center gap-2.5 text-left cursor-pointer focus:outline-none"
+              title="Retourner à l'accueil / Rafraîchir CoursShare"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-rose-600 to-red-700 flex items-center justify-center text-white shadow-md shadow-red-500/20 group-hover:scale-105 transition-transform duration-200">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-rose-600 to-red-700 flex items-center justify-center text-white shadow-md shadow-red-500/20 group-hover:scale-105 group-active:scale-95 transition-transform duration-200">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900 flex items-center gap-1">
+                <span className="font-extrabold text-xl tracking-tight text-slate-900 flex items-center gap-1 group-hover:text-red-600 transition-colors">
                   Cours<span className="text-red-600">Share</span>
-                  <span className="text-xs text-red-500 font-bold ml-0.5">TN</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black text-red-600 ml-1 bg-red-50 border border-red-200/80 px-1.5 py-0.5 rounded-md shadow-2xs">
+                    <span>TN</span>
+                    {/* Drapeau Tunisien à côté de TN de même taille */}
+                    <svg className="w-3.5 h-3.5 shrink-0 rounded-full shadow-2xs" viewBox="0 0 512 512" fill="none" aria-label="Drapeau Tunisie">
+                      <rect width="512" height="512" fill="#E70013" rx="256" />
+                      <circle cx="256" cy="256" r="120" fill="white" />
+                      <path
+                        d="M256 166C206.3 166 166 206.3 166 256C166 305.7 206.3 346 256 346C291.5 346 322.2 325.5 336.5 296C329.8 298.5 322.5 300 315 300C279.1 300 250 270.9 250 235C250 205.8 269.2 181.1 295.6 173C283.4 168.6 270 166 256 166Z"
+                        fill="#E70013"
+                      />
+                      <polygon
+                        points="295,225 303,246 326,246 308,259 314,281 295,268 276,281 282,259 264,246 287,246"
+                        fill="#E70013"
+                      />
+                    </svg>
+                  </span>
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-600 hidden sm:inline">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500 hidden sm:inline">
                   Facultés & Universités de Tunisie
                 </span>
               </div>
-            </a>
+            </button>
           </div>
 
           {/* Search Bar Desktop */}
@@ -267,6 +287,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               )}
             </button>
+
+            {/* Admin Commandes Button (TP3) */}
+            {userRole === 'admin' && (
+              <button
+                onClick={onOpenAdmin}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-amber-950 font-extrabold text-xs shadow-xs border border-amber-300 transition-all cursor-pointer"
+                title="Panneau Administrateur - Gestion des commandes"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-950 shrink-0" />
+                <span className="hidden sm:inline">Admin</span>
+                <span className="text-[10px] bg-amber-950/15 text-amber-950 px-1.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                  Commandes
+                </span>
+              </button>
+            )}
 
             {/* Auth / Account Button (TP3) */}
             {user ? (

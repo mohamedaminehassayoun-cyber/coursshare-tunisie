@@ -15,9 +15,11 @@ import {
   User, 
   Building2,
   Lock,
-  RefreshCw
+  RefreshCw,
+  MessageSquare
 } from 'lucide-react';
 import { CartItem, DbProduct, ShippingAddress, SupabaseShopService } from '../lib/supabaseShop';
+import { NotificationService } from '../lib/notificationService';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
 interface CartDrawerProps {
@@ -47,6 +49,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmedReference, setConfirmedReference] = useState<string>('');
+  const [lastOrderDetails, setLastOrderDetails] = useState<{
+    reference: string;
+    clientName: string;
+    phone: string;
+    governorate: string;
+    address: string;
+    faculty?: string;
+    items: { name: string; quantity: number; price: number }[];
+    subtotal: number;
+    shipping: number;
+    total: number;
+  } | null>(null);
 
   // Attempt ID unique pour l'idempotence
   const [attemptId, setAttemptId] = useState<string>(() => `att-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
@@ -130,6 +144,31 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       // Le panier n'est vidé QU'APRÈS confirmation de succès de Supabase
       onClearCart();
       onOrderSuccess(result.order_reference);
+
+      const orderData = {
+        reference: result.order_reference,
+        clientName: shippingAddress.fullName,
+        phone: shippingAddress.phone,
+        governorate: shippingAddress.governorate,
+        address: shippingAddress.addressLine,
+        faculty: shippingAddress.facultyOrCampus,
+        items: items.map(i => ({
+          name: i.product.name,
+          quantity: i.quantity,
+          price: i.product.price
+        })),
+        subtotal: subtotalCents / 100.0,
+        shipping: shippingCents / 100.0,
+        total: totalCents / 100.0
+      };
+
+      setLastOrderDetails(orderData);
+
+      // Envoi CallMeBot WhatsApp automatique en tâche de fond (si configuré)
+      NotificationService.sendAutomatedWhatsApp(orderData).catch(e => console.warn(e));
+
+      // Signal sonore dans le navigateur
+      NotificationService.playOrderChime();
 
       // Générer un nouvel attempt_id pour la prochaine fois
       setAttemptId(`att-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
@@ -415,6 +454,31 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <span className="font-bold text-slate-900">{totalDT.toFixed(2)} DT</span>
                 </div>
               </div>
+
+              {/* Action WhatsApp directe vers Mohamed Amine */}
+              {lastOrderDetails && (
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left space-y-2.5 animate-in fade-in">
+                  <div className="flex items-center gap-2 text-emerald-950 font-bold text-xs">
+                    <MessageSquare className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Transmettre la commande sur WhatsApp (+216 29 954 034)</span>
+                  </div>
+                  <p className="text-[11px] text-emerald-800 leading-relaxed">
+                    Cliquez sur le bouton vert ci-dessous pour envoyer le récapitulatif complet directement sur le WhatsApp du gérant pour une confirmation et livraison express :
+                  </p>
+                  <a
+                    href={NotificationService.getWhatsAppUrl(
+                      NotificationService.getWhatsAppConfig().adminPhone,
+                      NotificationService.buildOrderMessage(lastOrderDetails)
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Envoyer la commande sur WhatsApp 💬</span>
+                  </a>
+                </div>
+              )}
 
               <p className="text-[11px] text-slate-600">
                 Vous pouvez suivre l'état de préparation de votre polycopié dans votre <strong>Espace Mon Compte</strong>.

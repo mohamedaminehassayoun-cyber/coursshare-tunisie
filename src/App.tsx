@@ -158,7 +158,7 @@ export default function App() {
       const user = session?.user || null;
       setCurrentUser(user);
       if (user) {
-        SupabaseShopService.getUserRole(user.id).then((role) => {
+        SupabaseShopService.getUserRole(user.id, user.email).then((role) => {
           setUserRole(role);
         });
       } else {
@@ -171,7 +171,7 @@ export default function App() {
       const user = session?.user || null;
       setCurrentUser(user);
       if (user) {
-        SupabaseShopService.getUserRole(user.id).then((role) => {
+        SupabaseShopService.getUserRole(user.id, user.email).then((role) => {
           setUserRole(role);
         });
       } else {
@@ -438,6 +438,38 @@ export default function App() {
     }
   };
 
+  // Réinitialisation complète et retour fluide à l'accueil
+  const handleGoHomeAndRefresh = () => {
+    // 1. Quitter la page de la faculté ou n'importe quel autre écran
+    setSelectedFaculty(null);
+    setSelectedLicense(null);
+    setSelectedSemester('Tous les semestres');
+
+    // 2. Réinitialiser la recherche et tous les filtres du catalogue
+    setSearchQuery('');
+    setActiveCategory('all');
+    setSelectedDomain('Tous les domaines');
+    setSelectedLevel('Tous les niveaux');
+    setSelectedDocument(null);
+
+    // 3. Fermer les fenêtres et tiroirs ouverts
+    setShareModalOpen(false);
+    setFavoritesDrawerOpen(false);
+    setAboutModalOpen(false);
+    setContactModalOpen(false);
+    setCartDrawerOpen(false);
+    setAdminPortalOpen(false);
+    setAccountModalOpen(false);
+    setAuthModalOpen(false);
+    setConfigModalOpen(false);
+
+    // 4. Rafraîchir le catalogue Supabase
+    refreshProducts();
+
+    // 5. Remonter tout en haut au début de la page d'accueil
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const totalCartCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
@@ -454,6 +486,7 @@ export default function App() {
         activeCategory={activeCategory}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        onGoHome={handleGoHomeAndRefresh}
         // Supabase TP3 additions
         user={currentUser}
         userRole={userRole}
@@ -570,6 +603,7 @@ export default function App() {
         onOpenAboutModal={() => setAboutModalOpen(true)}
         onOpenContactModal={() => setContactModalOpen(true)}
         onOpenShareModal={() => setShareModalOpen(true)}
+        onGoHome={handleGoHomeAndRefresh}
       />
 
       {/* ========================================================================= */}
