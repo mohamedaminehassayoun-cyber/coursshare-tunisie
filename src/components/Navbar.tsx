@@ -16,7 +16,8 @@ import {
   User,
   ShieldCheck,
   Database,
-  LogIn
+  LogIn,
+  Calculator
 } from 'lucide-react';
 import { CategorySlug } from '../types';
 import { CATEGORIES } from '../data/coursesData';
@@ -44,6 +45,7 @@ interface NavbarProps {
   onOpenCart: () => void;
   onOpenConfig: () => void;
   isSupabaseActive: boolean;
+  onOpenCalculator?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -66,7 +68,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin,
   onOpenCart,
   onOpenConfig,
-  isSupabaseActive
+  isSupabaseActive,
+  onOpenCalculator
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
@@ -112,6 +115,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <ShieldCheck className="w-3 h-3" />
                 <span>Espace Admin</span>
+              </button>
+            )}
+
+            {onOpenCalculator && (
+              <button
+                onClick={onOpenCalculator}
+                className="flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-black bg-red-600 hover:bg-red-500 text-white shadow-xs transition-colors cursor-pointer"
+                title="Calculateur officiel de Moyenne LMD Tunisie"
+              >
+                <Calculator className="w-3 h-3" />
+                <span>Calculateur LMD 🇹🇳</span>
               </button>
             )}
 
@@ -212,6 +226,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               <ShoppingBag className="w-3.5 h-3.5 text-red-600" />
               <span>Polycopiés & Packs</span>
             </button>
+
+            {/* Calculateur LMD Nav */}
+            {onOpenCalculator && (
+              <button
+                onClick={onOpenCalculator}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:text-red-600 hover:bg-red-50/60 rounded-lg transition-colors cursor-pointer"
+              >
+                <Calculator className="w-3.5 h-3.5 text-red-600" />
+                <span>Calculateur LMD</span>
+              </button>
+            )}
 
             {/* Categories Dropdown */}
             <div className="relative">
@@ -392,6 +417,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
             <ChevronRight className="w-4 h-4" />
           </button>
+
+          {onOpenCalculator && (
+            <button
+              onClick={() => {
+                onOpenCalculator();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 flex items-center justify-between"
+            >
+              <span className="flex items-center gap-1.5">
+                <Calculator className="w-3.5 h-3.5 text-rose-600" />
+                🇹🇳 Calculateur Moyenne & Crédits LMD
+              </span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
 
           {userRole === 'admin' && (
             <button

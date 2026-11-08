@@ -32,6 +32,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { AdminPortal } from './components/AdminPortal';
 import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { ProductsCatalogSection } from './components/ProductsCatalogSection';
+import { GradeCalculatorModal } from './components/GradeCalculatorModal';
 
 export default function App() {
   // Load initial documents and merge with localStorage if any
@@ -97,6 +98,7 @@ export default function App() {
   const [adminPortalOpen, setAdminPortalOpen] = useState(false);
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [configModalOpen, setConfigModalOpen] = useState(false);
+  const [gradeCalcModalOpen, setGradeCalcModalOpen] = useState(false);
 
   // Active Faculty: null means on Main Hub; FacultyInfo means inside dedicated faculty portal
   const [selectedFaculty, setSelectedFaculty] = useState<FacultyInfo | null>(null);
@@ -501,6 +503,7 @@ export default function App() {
         onOpenCart={() => setCartDrawerOpen(true)}
         onOpenConfig={() => setConfigModalOpen(true)}
         isSupabaseActive={supabaseActive}
+        onOpenCalculator={() => setGradeCalcModalOpen(true)}
       />
 
       <main className="flex-1">
@@ -540,6 +543,7 @@ export default function App() {
                 const el = document.getElementById('faculty-hub-section');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
+              onOpenCalculator={() => setGradeCalcModalOpen(true)}
             />
 
             {/* Tunisian Faculty Directory & Campus Selector */}
@@ -739,6 +743,12 @@ export default function App() {
         isOpen={contactModalOpen}
         onClose={() => setContactModalOpen(false)}
         onShowToast={showToast}
+      />
+
+      {/* Grade & LMD Credits Calculator Modal */}
+      <GradeCalculatorModal
+        isOpen={gradeCalcModalOpen}
+        onClose={() => setGradeCalcModalOpen(false)}
       />
 
       {/* Real-time Toasts */}

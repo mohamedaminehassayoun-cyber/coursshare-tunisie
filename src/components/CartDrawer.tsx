@@ -155,7 +155,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         items: items.map(i => ({
           name: i.product.name,
           quantity: i.quantity,
-          price: i.product.price
+          price: typeof i.product.price === 'number' ? i.product.price : ((i.product.price_cents ?? 0) / 100)
         })),
         subtotal: subtotalCents / 100.0,
         shipping: shippingCents / 100.0,

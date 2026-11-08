@@ -8,7 +8,8 @@ import {
   ArrowRight, 
   GraduationCap, 
   Sparkles,
-  MapPin
+  MapPin,
+  Calculator
 } from 'lucide-react';
 import { DOMAINS, LEVELS } from '../data/coursesData';
 
@@ -21,6 +22,7 @@ interface HeroSectionProps {
   setSelectedLevel: (level: string) => void;
   onExploreClick: () => void;
   onOpenRoomClick: () => void;
+  onOpenCalculator?: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -32,6 +34,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   setSelectedLevel,
   onExploreClick,
   onOpenRoomClick,
+  onOpenCalculator,
 }) => {
   const quickSearches = [
     { label: 'INSAT (Dr. Lilia Sfaxi)', query: 'INSAT' },
@@ -59,9 +62,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <span>La 1ère plateforme collaborative pour les étudiants des facultés tunisiennes</span>
           </div>
 
-          {/* Main Title */}
+          {/* Main Title - Optimisé SEO pour le TP4 */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-            Révise avec les meilleurs cours des <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-200">Facultés Tunisiennes</span>
+            Cours, Polycopiés et Examens Corrigés des <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-200">Facultés Tunisiennes</span>
           </h1>
 
           {/* Lead Subtitle */}
@@ -84,6 +87,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             >
               Parcourir tous les documents
             </button>
+            {onOpenCalculator && (
+              <button
+                onClick={onOpenCalculator}
+                className="px-5 py-3.5 bg-rose-600/30 hover:bg-rose-600/40 text-rose-200 font-bold text-sm rounded-xl border border-rose-500/40 transition-all cursor-pointer flex items-center gap-2 shadow-xs"
+              >
+                <Calculator className="w-4 h-4 text-rose-300" />
+                <span>Calculateur LMD 🇹🇳</span>
+              </button>
+            )}
           </div>
 
           {/* Interactive Multi-Field Search Card */}
