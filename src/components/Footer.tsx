@@ -5,7 +5,8 @@ import {
   BookOpen, 
   ShieldCheck, 
   Mail, 
-  Building2 
+  Building2,
+  Instagram
 } from 'lucide-react';
 import { CATEGORIES, DOMAINS, TUNISIAN_FACULTIES } from '../data/coursesData';
 import { CategorySlug } from '../types';
@@ -68,19 +69,23 @@ export const Footer: React.FC<FooterProps> = ({
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
               Plateforme académique collaborative dédiée exclusivement aux étudiants des universités et instituts tunisiens : polycopiés de cours, séries de TD résolues, DS et examens de session principale et contrôle.
             </p>
-            <div className="pt-2 flex items-center gap-3">
+            <div className="pt-2 flex flex-wrap items-center gap-2.5">
               <button
                 onClick={onOpenShareModal}
                 className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs rounded-lg transition-colors cursor-pointer"
               >
-                Partager un cours tunisien
+                Partager un cours
               </button>
-              <button
-                onClick={onOpenContactModal}
-                className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-lg transition-colors cursor-pointer"
+              <a
+                href="https://www.instagram.com/coursshare.tn?cplk=MWlqdXByYWw1aXFwaQ==&utm_source=ig_contact_invite"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-600 via-pink-600 to-rose-500 hover:opacity-95 text-white font-bold text-xs rounded-lg transition-all shadow-sm shadow-pink-500/20"
+                title="Suivre CoursShare TN sur Instagram"
               >
-                Demander un examen
-              </button>
+                <Instagram className="w-3.5 h-3.5" />
+                <span>@coursshare.tn</span>
+              </a>
             </div>
           </div>
 
@@ -161,6 +166,17 @@ export const Footer: React.FC<FooterProps> = ({
                   Bibliothèque intégrale
                 </button>
               </li>
+              <li>
+                <a
+                  href="https://www.instagram.com/coursshare.tn?cplk=MWlqdXByYWw1aXFwaQ==&utm_source=ig_contact_invite"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-pink-400 text-slate-300 font-semibold transition-colors flex items-center gap-1.5"
+                >
+                  <Instagram className="w-3.5 h-3.5 text-pink-500" />
+                  <span>Instagram (@coursshare.tn)</span>
+                </a>
+              </li>
               <li className="pt-2 text-[11px] text-slate-500 leading-normal">
                 100% gratuit et collaboratif pour tous les étudiants de Tunisie.
               </li>
@@ -168,11 +184,22 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
 
-        {/* Bottom copyright */}
+        {/* Bottom copyright & Socials */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} CoursShare Tunisie. Développé pour et par les étudiants tunisiens.</p>
-          <div className="flex items-center gap-1 text-slate-400">
-            <span>🇹🇳 Tahya Tounes · Réussite pour tous nos étudiants</span>
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="https://www.instagram.com/coursshare.tn?cplk=MWlqdXByYWw1aXFwaQ==&utm_source=ig_contact_invite"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-pink-400 hover:text-pink-300 font-bold transition-colors"
+            >
+              <Instagram className="w-3.5 h-3.5" />
+              <span>Instagram : @coursshare.tn</span>
+            </a>
+            <div className="flex items-center gap-1 text-slate-400">
+              <span>🇹🇳 Tahya Tounes · Réussite pour tous nos étudiants</span>
+            </div>
           </div>
         </div>
       </div>
