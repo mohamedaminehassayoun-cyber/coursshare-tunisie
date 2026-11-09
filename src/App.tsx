@@ -33,6 +33,7 @@ import { AdminPortal } from './components/AdminPortal';
 import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { ProductsCatalogSection } from './components/ProductsCatalogSection';
 import { GradeCalculatorModal } from './components/GradeCalculatorModal';
+import { FloatingScrollAssistant } from './components/FloatingScrollAssistant';
 
 export default function App() {
   // Load initial documents and merge with localStorage if any
@@ -749,6 +750,11 @@ export default function App() {
       <GradeCalculatorModal
         isOpen={gradeCalcModalOpen}
         onClose={() => setGradeCalcModalOpen(false)}
+      />
+
+      {/* Floating Scroll & Quick Navigation Assistant on the Right */}
+      <FloatingScrollAssistant
+        onOpenCalculator={() => setGradeCalcModalOpen(true)}
       />
 
       {/* Real-time Toasts */}
